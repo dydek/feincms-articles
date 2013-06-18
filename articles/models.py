@@ -1,9 +1,9 @@
 from django.conf import settings
+from django.conf.urls import patterns, url
 from django.db import models
 from django.db.models import Q
 from django.utils.translation import ugettext_lazy as _
 from django.core.urlresolvers import get_callable
-from django.conf.urls.defaults import patterns, url
 
 try:
     from feincms.admin.item_editor import ItemEditor
@@ -13,6 +13,7 @@ except ImportError:
 from feincms.content.application import models as app_models
 from feincms.models import Base
 from feincms.utils.managers import ActiveAwareContentManagerMixin
+from feincms.extensions import ExtensionModelAdmin
 
 
 class ArticleManager(ActiveAwareContentManagerMixin, models.Manager):
@@ -75,8 +76,8 @@ class Article(Base):
 ModelAdmin = get_callable(getattr(settings, 'ARTICLE_MODELADMIN_CLASS', 'django.contrib.admin.ModelAdmin'))
 
 
-class ArticleAdmin(ItemEditor, ModelAdmin):
-    list_display = ['__unicode__', 'active',]
+class ArticleAdmin(ItemEditor, ExtensionModelAdmin):
+    list_display = ['__unicode__', 'active' ]
     list_filter = []
     search_fields = ['title', 'slug']
     filter_horizontal = []
@@ -91,13 +92,6 @@ class ArticleAdmin(ItemEditor, ModelAdmin):
     ]
 
     # TODO: add_extension_options is copied from feincms.module.page.modeladmins.PageAdmin
-    # When FeinCMS 1.7 is released it should be provided by extending feincms.extensions.ExtensionModelAdmin
+
     fieldset_insertion_index = 1
-    @classmethod
-    def add_extension_options(cls, *f):
-        if isinstance(f[-1], dict):     # called with a fieldset
-            cls.fieldsets.insert(cls.fieldset_insertion_index, f)
-            f[1]['classes'] = list(f[1].get('classes', []))
-            f[1]['classes'].append('collapse')
-        else:   # assume called with "other" fields
-            cls.fieldsets[1][1]['fields'].extend(f)
+

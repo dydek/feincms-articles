@@ -30,7 +30,8 @@ try:
 except ImportError:
     # In haystack >= 2.0 Indexes subclass indexes.Indexable
     class ArticleIndex(TempArticleIndex, indexes.Indexable):
-        pass
+        def index_queryset(self, using=None):
+            return self.get_model().objects.active()
 else:
     class ArticleIndex(TempArticleIndex):
         def get_queryset(self):
