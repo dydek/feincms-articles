@@ -4,6 +4,7 @@ from django.db import models
 from django.db.models import Q
 from django.utils.translation import ugettext_lazy as _
 from django.core.urlresolvers import get_callable
+from feincms.module.mixins import ContentModelMixin
 
 try:
     from feincms.admin.item_editor import ItemEditor
@@ -20,7 +21,7 @@ class ArticleManager(ActiveAwareContentManagerMixin, models.Manager):
     active_filters = {'simple-active': Q(active=True)}
 
 
-class Article(Base):
+class Article(ContentModelMixin, Base):
     active = models.BooleanField(_('active'), default=True)
 
     title = models.CharField(_('title'), max_length=255)
@@ -64,9 +65,9 @@ class Article(Base):
     def __unicode__(self):
         return u"%s" % (self.title)
 
-    @app_models.permalink
+    @models.permalink
     def get_absolute_url(self):
-        return ('article_detail', 'articles.urls', (), {'slug': self.slug})
+        return ('article_detail', (), {'slug': self.slug})
 
     @property
     def is_active(self):
@@ -85,9 +86,9 @@ class ArticleAdmin(ItemEditor, ExtensionModelAdmin):
         'slug': ('title',),
     }
     fieldsets = [
-        (None, {
+        [None, {
             'fields': ['active', 'title', 'slug']
-        }),
+        }],
         # <-- insertion point, extensions appear here, see insertion_index above
     ]
 

@@ -67,9 +67,9 @@ class Category(models.Model):
     def __unicode__(self):
         return self.name
 
-    @app_models.permalink
+    @models.permalink
     def get_absolute_url(self):
-        return ('article_category', 'articles.urls', (self.local_url,))
+        return ('article_category', (self.local_url,))
 
 mptt.register(Category)
 

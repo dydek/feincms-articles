@@ -24,11 +24,11 @@ def register(cls, admin_cls):
     cls.get_urlpatterns = get_urlpatterns
 
     def get_absolute_url(self):
-        return ('article_detail', 'articles.urls', (), {
+        return ('article_detail', (), {
                 'category_url': self.category.local_url,
                 'slug': self.slug,
                 })
-    cls.get_absolute_url = app_models.permalink(get_absolute_url)
+    cls.get_absolute_url = models.permalink(get_absolute_url)
 
     if admin_cls:
         admin_cls.add_extension_options('category')

@@ -42,7 +42,6 @@ class CategoryArticleList(ArticleList, CategoryAccesssGroupsMixin):
     category = None
 
     def get(self, request, *args, **kwargs):
-
         if 'category_url' in self.kwargs:
             self.category = get_object_or_404(Category, local_url=self.kwargs['category_url'])
             if not self.has_access_groups_permission(self.category):
