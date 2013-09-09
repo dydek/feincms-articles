@@ -6,7 +6,7 @@ from models import Article
 
 class TempArticleIndex(indexes.SearchIndex):
     title = indexes.CharField(model_attr='title')
-    name = indexes.CharField(model_attr='title')
+    autocomplete_name = indexes.EdgeNgramField(model_attr='title')
     text = indexes.CharField(document=True, use_template=True)
 
     def get_model(self):

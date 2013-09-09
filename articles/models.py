@@ -63,11 +63,14 @@ class Article(ContentModelMixin, Base):
         return cls.get_urlpatterns()
 
     def __unicode__(self):
-        return u"%s" % (self.title)
+        return u"%s" % self.title
 
     @models.permalink
     def get_absolute_url(self):
-        return ('article_detail', (), {'slug': self.slug})
+        return 'article_detail', (), {'slug': self.slug}
+
+    def get_full_name_for_search(self):
+        return u'{} ({})'.format(self.title, self._meta.verbose_name)
 
     @property
     def is_active(self):
