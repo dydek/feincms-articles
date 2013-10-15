@@ -69,7 +69,8 @@ class Article(ContentModelMixin, Base):
     def get_absolute_url(self):
         return 'article_detail', (), {'slug': self.slug}
 
-    def get_full_name_for_search(self):
+    @property
+    def full_name_for_search(self):
         return u'{} ({})'.format(self.title, self._meta.verbose_name)
 
     @property
