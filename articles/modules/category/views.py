@@ -80,5 +80,6 @@ class CategoryArticleList(ArticleList, CategoryAccesssGroupsMixin):
                 articles = articles.filter(category__in=self.category.get_descendants(include_self=True)).order_by(self.category.order_by)
             else:
                 articles = articles.filter(category=self.category).order_by(self.category.order_by)
-
+        if 'tags' in self.request.GET:
+            articles = articles.filter(tags__name__in=self.request.GET.getlist('tags')).distinct()
         return articles.select_related('category')
