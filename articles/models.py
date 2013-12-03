@@ -28,7 +28,7 @@ class Article(ContentModelMixin, Base):
     slug = models.SlugField(_('slug'), max_length=255, help_text=_('This will be automatically generated from the name'), unique=True, editable=True)
 
     class Meta:
-        ordering = ['title']
+        ordering = ['-publication_date']
         unique_together = []
         verbose_name = _('article')
         verbose_name_plural = _('articles')
